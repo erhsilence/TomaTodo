@@ -7,11 +7,13 @@
 	<title>Document</title>
 </head>
 <body>
-	<div id = "app">
-
+	<div class = "tomo" >
 		{{minute}}:{{secend}}
 		<button v-on:click="time">div</button>
-		<input type="text" v-model.lazy="todoo">
+    </div>
+    
+    <div class = "todo">
+        <input type="text" v-model.lazy="todoo">
 		<button v-on:click="addtodo">新建任务</button>
 		<dl v-for = "(todo,index) in todolist ":key=todo.index>
 			<dt></dt>
@@ -23,36 +25,42 @@
 			<dd class="list">{{done.content}}</dd>
 			
 		</dl>
-		
-	</div>
-
+    </div>
 	
-	<script type="text/javascript">
-		var vm = new Vue({
-			el : '#app',
+    <script type="text/javascript">
+        var todo = new Vue({
+            el : '.todo',
+            data : {
+                todoo : ' ',
+				todolist : [		
+				],
+				donelist : [
+				]
+            },
+            methods : {
+                done : function(index){
+					this.donelist.push({content : this.todolist[index].content});
+                    this.todolist.splice(index,1);
+				},
+				addtodo : function(){
+					this.todolist.push({content : this.todoo});
+                    console.log(this.todoo);
+                    this.todoo = '';
+				}
+            }
+        });
+
+		var tomo = new Vue({
+			el : '.tomo',
 			data : {
 				tomo : 1500000,
 				minute : '25',
 				rest : 300000,
 				secend : '00',
-				todoo : ' ',
-				todolist : [
 				
-				],
-				donelist : [
-
-				]
 			},
 			methods : {
-				done : function(index){
-					this.donelist.push({content : this.todolist[index].content});
-					this.todolist.splice(index,1);
-
-				},
-				addtodo : function(){
-					this.todolist.push({content : this.todoo});
-
-				},
+				
 				// 25分钟倒数
 				time : function(){
 					var that = this;
@@ -61,16 +69,19 @@
 					var now = new Date().getTime();
 					var min = parseInt((timeou - now)/(1000*60));
 					var sec = parseInt((timeou - now )%(1000*60)/1000);
-					var flag = true;	//状态切换标志
+                    var flag = true;	//状态切换标志
+                    function refresh(){
+                        now = new Date().getTime();
+						min = parseInt((timeou - now)/(1000*60));
+						sec = parseInt((timeou - now )%(1000*60)/1000);
+                    };
 					function change(){
 						if(flag == true){
 							flag = false;
 							console.log('working');
 						start = new Date().getTime();
 						timeou = start + that.tomo;
-						now = new Date().getTime();
-						min = parseInt((timeou - now)/(1000*60));
-						sec = parseInt((timeou - now )%(1000*60)/1000);
+						refresh();
 						var work = setInterval(function(){
 						now = new Date().getTime();
 						min = parseInt((timeou - now)/(1000*60));
@@ -92,9 +103,7 @@
 					console.log("resting");
 						start = new Date().getTime();
 						timeou = start + that.rest;
-						now = new Date().getTime();
-						min = parseInt((timeou - now)/(1000*60));
-						sec = parseInt((timeou - now )%(1000*60)/1000);
+						refresh();
 						var res = setInterval(function(){
 						now = new Date().getTime();
 						min = parseInt((timeou - now)/(1000*60));
@@ -119,12 +128,13 @@
 		})
 	</script>
 	<style type="text/css">
-		.list{
-			margin: 20px;
-			width: 200px;
-			height: 50px;
-			background-color: #fcc;
-		}
+	.tomo{
+        width: 50%;
+        background-color: #fcc;   
+        padding-top: 20%;
+        padding-bottom: 20%;
+        float: left;
+    }
 	</style>
 </body>
 </html>
