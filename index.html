@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	 <script src="vue.js" type="text/javascript"></script>
+	<title>Document</title>
+</head>
+<body>
+	<div id = "app">
+
+		{{minute}}:{{secend}}
+		<button v-on:click="time">div</button>
+		<input type="text" v-model.lazy="todoo">
+		<button v-on:click="addtodo">新建任务</button>
+		<dl v-for = "(todo,index) in todolist ":key=todo.index>
+			<dt></dt>
+			<dd v-on:click="done(index)" class="list">{{todo.content}}</dd>
+			
+		</dl>
+		已完成任务:
+		<dl v-for = "done in donelist">
+			<dd class="list">{{done.content}}</dd>
+			
+		</dl>
+		
+	</div>
+
+	
+	<script type="text/javascript">
+		var vm = new Vue({
+			el : '#app',
+			data : {
+				tomo : 1500000,
+				minute : '25',
+				rest : 300000,
+				secend : '00',
+				todoo : ' ',
+				todolist : [
+				
+				],
+				donelist : [
+
+				]
+			},
+			methods : {
+				done : function(index){
+					this.donelist.push({content : this.todolist[index].content});
+					this.todolist.splice(index,1);
+
+				},
+				addtodo : function(){
+					this.todolist.push({content : this.todoo});
+
+				},
+				// 25分钟倒数
+				time : function(){
+					var that = this;
+					var start = new Date().getTime();
+					var timeou = start + that.tomo;
+					var now = new Date().getTime();
+					var min = parseInt((timeou - now)/(1000*60));
+					var sec = parseInt((timeou - now )%(1000*60)/1000);
+					var flag = true;	//状态切换标志
+					function change(){
+						if(flag == true){
+							flag = false;
+							console.log('working');
+						start = new Date().getTime();
+						timeou = start + that.tomo;
+						now = new Date().getTime();
+						min = parseInt((timeou - now)/(1000*60));
+						sec = parseInt((timeou - now )%(1000*60)/1000);
+						var work = setInterval(function(){
+						now = new Date().getTime();
+						min = parseInt((timeou - now)/(1000*60));
+						that.minute = min;
+						
+						sec = parseInt((timeou - now )%(1000*60)/1000);
+						that.secend = sec;
+						now = new Date().getTime();
+					},100);
+					setInterval(function(){
+						if(now > timeou){
+							clearInterval(work);
+							change();
+						}
+					},100);	
+				}else{
+					//5分钟倒数
+					flag = true;
+					console.log("resting");
+						start = new Date().getTime();
+						timeou = start + that.rest;
+						now = new Date().getTime();
+						min = parseInt((timeou - now)/(1000*60));
+						sec = parseInt((timeou - now )%(1000*60)/1000);
+						var res = setInterval(function(){
+						now = new Date().getTime();
+						min = parseInt((timeou - now)/(1000*60));
+						that.minute = min;
+						sec = parseInt((timeou - now )%(1000*60)/1000);
+						that.secend = sec;
+						now = new Date().getTime();
+					},100);
+					setInterval(function(){
+						if(now > timeou){
+							clearInterval(res);
+							change();
+						}
+					},100);	
+					}
+				}
+					
+						change();
+				}
+			} 
+
+		})
+	</script>
+	<style type="text/css">
+		.list{
+			margin: 20px;
+			width: 200px;
+			height: 50px;
+			background-color: #fcc;
+		}
+	</style>
+</body>
+</html>
