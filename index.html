@@ -13,21 +13,23 @@
     </div>
     
     <div class = "todo">
-		<input type="text" v-model="todoo" @keydown.enter = "addtodo($event)">
+
+					<input type="text" v-model="todoo" @keydown.enter = "addtodo($event)">
+
 		<div class = "p">
 			当前任务:
 		</div class = "p"> 
+		<br>
 		<dl v-for = "(todo,index) in todolist ":key=todo.index>
-			<dd v-on:click="done(index)" class="list">{{todo.content}}</dd>
-			
+			<dd v-on:click="done(index)" class="list">{{todo.content}}</dd>			
 		</dl>
+		<br>
 		<div class = "p">
 			已完成任务:
 		</div class = "p">
-		
+		<br>		
 		<dl v-for = "done in donelist">
-			<dd class="list">{{done.content}}</dd>
-			
+			<dd class="list">{{done.content}}</dd>			
 		</dl>
     </div>
 	
@@ -37,31 +39,50 @@
 		margin: 0;
 		padding: 0;
 	}
+	html{
+		width: 100%;
+		height: 100%;
+	}
+	body{
+		width: 100%;
+		height: 100%;
+	}
 	.tomo{
         width: 50%;
+		height: 100%;
         background-color: #fcc;   
-        padding-top: 20%;
-        padding-bottom: 20%;
         float: left;
 	}
 	
 	.todo{
-		float:left;
-		background-color:burlywood;
 		width: 50%;
-
+		height: 100%;
+		float: right;;
+		background-color:burlywood;
+		margin: 0 auto;
 
 	}
 
 	input{
-		float: left;
+		margin: auto;
+		outline-style: none;
+		border : 0px;
 		display: block;
-		width: 50%;
+		
 	}
 
 	.p{
 		float: left;
 		display: block;
+		font-size: 20px;
+		margin-left: 10px	;
+	}
+
+	.list{
+		margin: 0px;
+		border: 1px;
+		border-style: solid;
+		margin-top: 4px;
 	}
 
 
