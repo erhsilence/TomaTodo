@@ -13,21 +13,62 @@
     </div>
     
     <div class = "todo">
-        <input type="text" v-model.lazy="todoo">
-		<button v-on:click="addtodo">新建任务</button>
+		<input type="text" v-model="todoo" @keydown.enter = "addtodo($event)">
+		<div class = "p">
+			当前任务:
+		</div class = "p"> 
 		<dl v-for = "(todo,index) in todolist ":key=todo.index>
-			<dt></dt>
 			<dd v-on:click="done(index)" class="list">{{todo.content}}</dd>
 			
 		</dl>
-		已完成任务:
+		<div class = "p">
+			已完成任务:
+		</div class = "p">
+		
 		<dl v-for = "done in donelist">
 			<dd class="list">{{done.content}}</dd>
 			
 		</dl>
     </div>
 	
-    <script type="text/javascript">
+    
+	<style type="text/css">
+	*{
+		margin: 0;
+		padding: 0;
+	}
+	.tomo{
+        width: 50%;
+        background-color: #fcc;   
+        padding-top: 20%;
+        padding-bottom: 20%;
+        float: left;
+	}
+	
+	.todo{
+		float:left;
+		background-color:burlywood;
+		width: 50%;
+
+
+	}
+
+	input{
+		float: left;
+		display: block;
+		width: 50%;
+	}
+
+	.p{
+		float: left;
+		display: block;
+	}
+
+
+
+	</style>
+	
+	<script type="text/javascript">
         var todo = new Vue({
             el : '.todo',
             data : {
@@ -38,20 +79,20 @@
 				]
             },
             methods : {
+				addtodo($event){
+						this.todolist.push({content : this.todoo});
+                    console.log(this.todoo);
+                    this.todoo = '';
+				},
                 done : function(index){
 					this.donelist.push({content : this.todolist[index].content});
                     this.todolist.splice(index,1);
-				},
-				addtodo : function(){
-					this.todolist.push({content : this.todoo});
-                    console.log(this.todoo);
-                    this.todoo = '';
 				}
             }
         });
 
 		var tomo = new Vue({
-			el : '.tomo',
+			el : '.tomo',	
 			data : {
 				tomo : 1500000,
 				minute : '25',
@@ -69,12 +110,17 @@
 					var now = new Date().getTime();
 					var min = parseInt((timeou - now)/(1000*60));
 					var sec = parseInt((timeou - now )%(1000*60)/1000);
-                    var flag = true;	//状态切换标志
+					var flag = true;	//状态切换标志
+					
+					for(var i = 1; i < 1000; i++) {
+					clearInterval(i);
+					}
                     function refresh(){
                         now = new Date().getTime();
 						min = parseInt((timeou - now)/(1000*60));
 						sec = parseInt((timeou - now )%(1000*60)/1000);
-                    };
+					};
+					
 					function change(){
 						if(flag == true){
 							flag = false;
@@ -91,6 +137,7 @@
 						that.secend = sec;
 						now = new Date().getTime();
 					},100);
+					
 					setInterval(function(){
 						if(now > timeou){
 							clearInterval(work);
@@ -127,14 +174,5 @@
 
 		})
 	</script>
-	<style type="text/css">
-	.tomo{
-        width: 50%;
-        background-color: #fcc;   
-        padding-top: 20%;
-        padding-bottom: 20%;
-        float: left;
-    }
-	</style>
 </body>
 </html>
